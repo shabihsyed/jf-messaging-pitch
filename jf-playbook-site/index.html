@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jellyfish GTM Playbook</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap">
+<style>
+/* Layout: fixed top bar, left sidebar of three tabs, single reading column (editorial portfolio style). */
+:root{--ink:#1a1a1a;--ink2:#3d3d3d;--dim:#767676;--rule:#e8e8e8;--gold:#C9944A;--teal:#0D7C6E;--page:#FAFAF8;--white:#FFFFFF;--soft:rgba(201,148,74,0.06);
+--serif:'DM Serif Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--ink:#f2f0ea;--ink2:#cfcbc2;--dim:#9a968d;--rule:#2b2a27;--page:#141412;--white:#1c1b19;--soft:rgba(201,148,74,0.12);color-scheme:dark} }
+:root[data-theme="dark"]{--ink:#f2f0ea;--ink2:#cfcbc2;--dim:#9a968d;--rule:#2b2a27;--page:#141412;--white:#1c1b19;--soft:rgba(201,148,74,0.12);color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--page);color:var(--ink);font-family:var(--sans);font-weight:300;padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px))}
+a{color:inherit;text-decoration:none}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--page);border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;height:52px;padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tb-brand{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;letter-spacing:.01em;width:220px;padding:0 24px;border-right:1px solid var(--rule);height:100%;padding-left:max(24px,env(safe-area-inset-left,0px))}
+.tb-hex{width:18px;height:18px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+.tb-date{font-size:12px;color:var(--dim)}
+.shell{display:flex;min-height:calc(100% - 52px)}
+.sidebar{width:220px;flex-shrink:0;background:var(--white);border-right:1px solid var(--rule);padding:28px 0 40px;position:sticky;top:52px;align-self:flex-start;height:calc(100vh - 52px)}
+.sn-label{padding:10px 24px 4px;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.sn-tab{display:flex;align-items:center;gap:8px;width:100%;padding:8px 24px;background:none;border:none;border-left:2px solid transparent;font-family:var(--sans);font-size:14px;font-weight:500;color:var(--dim);cursor:pointer;text-align:left;letter-spacing:.02em}
+.sn-tab:hover{color:var(--ink)}
+.sn-tab[aria-selected="true"]{color:var(--ink);border-left-color:var(--gold);background:var(--soft)}
+.sn-tab:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.sn-dot{width:5px;height:5px;border-radius:50%;background:var(--rule);flex-shrink:0}
+.sn-tab[aria-selected="true"] .sn-dot{background:var(--gold)}
+.sn-divider{height:1px;background:var(--rule);margin:12px 16px}
+.sn-link{display:block;padding:6px 24px;font-size:12px;color:var(--teal);font-weight:500;letter-spacing:.01em}
+.main{flex:1;min-width:0}
+.section{max-width:740px;margin:0 auto;padding:60px 40px 100px}
+.section.wide{max-width:1500px}
+.section[hidden]{display:none}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.headline{font-family:var(--serif);font-size:52px;line-height:1.08;letter-spacing:-.02em;margin-bottom:20px;font-weight:400;text-wrap:balance}
+.headline em{color:var(--gold);font-style:italic}
+.subhead{font-family:var(--serif);font-size:28px;font-weight:400;line-height:1.25;margin-bottom:16px;letter-spacing:-.01em;text-wrap:balance}
+.body-l{font-size:18px;line-height:1.75;color:var(--ink2);font-weight:300}
+.body{font-size:16px;line-height:1.7;color:var(--ink2);font-weight:300}
+.body + .body{margin-top:16px}
+.rule{height:1px;background:var(--rule);margin:48px 0}
+.kicker{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.pullquote{border-left:3px solid var(--gold);padding:4px 0 4px 28px;margin:40px 0}
+.pullquote p{font-family:var(--serif);font-size:22px;line-height:1.5;color:var(--ink);font-style:italic}
+.pullquote cite{display:block;margin-top:10px;font-size:12px;color:var(--dim);font-style:normal;letter-spacing:.06em;text-transform:uppercase}
+.story-list{list-style:none;margin:28px 0;counter-reset:li}
+.story-list li{display:flex;gap:16px;padding:18px 0;border-top:1px solid var(--rule);font-size:16px;line-height:1.65;color:var(--ink2)}
+.story-list li:last-child{border-bottom:1px solid var(--rule)}
+.story-list li::before{content:counter(li);counter-increment:li;font-family:var(--serif);font-size:22px;color:var(--gold);flex-shrink:0;line-height:1;margin-top:2px}
+.nb{padding:20px 0;border-top:1px solid var(--rule)}
+.nb:last-child{border-bottom:1px solid var(--rule)}
+.nb-label{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.nb-text{font-size:16px;line-height:1.7;color:var(--ink2)}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:32px 0}
+.stat-cell{background:var(--white);padding:24px 20px}
+.stat-num{font-family:var(--serif);font-size:38px;color:var(--gold);letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.stat-label{font-size:12px;color:var(--dim);margin-top:6px;line-height:1.4}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{font-size:11px;font-weight:500;padding:3px 10px;border-radius:2px;letter-spacing:.04em}
+.tag.g{background:rgba(13,124,110,.08);color:var(--teal);border:1px solid rgba(13,124,110,.2)}
+.tag.o{background:rgba(201,148,74,.08);color:var(--gold);border:1px solid rgba(201,148,74,.2)}
+.tag.k{background:rgba(26,26,26,.06);color:var(--ink2);border:1px solid var(--rule)}
+.tl-item{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:16px 0;border-top:1px solid var(--rule)}
+.tl-item:last-child{border-bottom:1px solid var(--rule)}
+.tl-date{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+.tl-title{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.tl-desc{font-size:13px;color:var(--ink2);line-height:1.6}
+/* use-case lanes, restyled */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 28px;align-items:center}
+.cols{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;margin-top:24px}
+.cols .h{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--dim);display:flex;align-items:center;gap:8px}
+.cols .h b{font-family:var(--serif);font-weight:400;font-size:18px;color:var(--gold)}
+.lane{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;padding:24px 0;border-top:1px solid var(--rule)}
+.lane:last-of-type{border-bottom:1px solid var(--rule)}
+.card{min-width:0;display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:2px solid var(--rule)}
+.card.stage{border-top-color:var(--gold)}
+.card.stage .k{color:var(--gold)}
+.card.stage h2{font-family:var(--serif);font-size:22px;font-weight:400;line-height:1.2;margin:0}
+.card.stage .q{font-size:13px;color:var(--teal);font-weight:500;margin:0}
+.card.stage .camp{font-size:13px;color:var(--ink2);line-height:1.55;margin:0}
+.card.stage .camp strong{color:var(--ink);font-weight:500}
+.card.stage .who{margin-top:auto;font-size:11px;color:var(--dim);letter-spacing:.04em}
+.k{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--dim)}
+.hook{font-family:var(--serif);font-size:19px;line-height:1.3;margin:0;color:var(--ink)}
+.card p{margin:0;font-size:13px;line-height:1.6;color:var(--ink2)}
+.card ul,.card ol{margin:0;padding-left:18px;font-size:13px;line-height:1.55;color:var(--ink2);display:flex;flex-direction:column;gap:6px}
+.card ol li::marker{font-family:var(--serif);color:var(--gold)}
+.proof{border-left:3px solid var(--gold);padding-left:10px}
+.proof b{font-weight:500;color:var(--ink)}
+.stat{display:flex;flex-direction:column;gap:2px;padding-top:8px;border-top:1px solid var(--rule)}
+.stat .n{font-family:var(--serif);font-size:24px;color:var(--gold);line-height:1;font-variant-numeric:tabular-nums}
+.stat .l{font-size:11.5px;color:var(--dim);line-height:1.4}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11px;font-weight:500;padding:3px 10px;border-radius:2px;letter-spacing:.04em;background:rgba(13,124,110,.08);color:var(--teal);border:1px solid rgba(13,124,110,.2)}
+.chip.soon{background:transparent;color:var(--dim);border:1px dashed var(--rule)}
+.chip.new{background:rgba(201,148,74,.08);color:var(--gold);border:1px solid rgba(201,148,74,.25)}
+/* deck grid */
+.dsec{margin:36px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:16px}
+.thumb{display:flex;flex-direction:column;gap:6px}
+.thumb .f{aspect-ratio:16/9;border:1px solid var(--rule);padding:12px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;overflow:hidden;position:relative;transition:border-color .18s}
+.thumb:hover .f{border-color:var(--gold)}
+.thumb .f.light,.thumb .f.shot{background:var(--white);color:var(--ink)}
+.thumb .f.navy{background:#0d062b;color:#fff}
+.thumb .f.grad{background:linear-gradient(135deg,#7319f2 0%,#9b4df5 55%,#cfef09 140%);color:#fff}
+.thumb .f.shot::after{content:"";position:absolute;right:12px;top:12px;width:52%;height:60%;border:1px solid var(--rule);background:repeating-linear-gradient(0deg,var(--soft) 0 6px,transparent 6px 10px)}
+.thumb .f .t{font-size:12px;font-weight:500;line-height:1.25;position:relative;z-index:1}
+.thumb .f .e{font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;opacity:.85}
+.thumb .f.light .e,.thumb .f.shot .e{color:var(--gold)}
+.thumb .f.navy .e{color:#cfef09}
+.thumb .f-img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--rule);transition:border-color .18s}
+.thumb:hover .f-img{border-color:var(--gold)}
+.thumb .n{font-family:var(--serif);font-size:16px;color:var(--dim)}
+.openbtn{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:var(--teal);letter-spacing:.02em;padding:6px 12px;border:1px solid rgba(13,124,110,.25);border-radius:2px;margin-top:8px}
+.openbtn:hover{border-color:var(--teal)}
+.mob-menu{display:none}
+@media (max-width:1100px){ .cols{display:none} .lane{grid-template-columns:1fr;gap:12px} .card:not(.stage)::before{content:attr(data-step);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--dim)} }
+@media (max-width:680px){
+  .tb-brand{width:auto;border-right:none} .tb-date{display:none}
+  .shell{flex-direction:column} .sidebar{position:static;height:auto;width:100%;padding:8px 0;display:flex;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--rule)}
+  .sn-label,.sn-divider,.sn-link{display:none} .sn-tab{width:auto;padding:8px 16px;border-left:0;border-bottom:2px solid transparent} .sn-tab[aria-selected="true"]{border-bottom-color:var(--gold)}
+  .section{padding:32px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px))}
+  .headline{font-size:34px;line-height:1.1} .subhead{font-size:22px} .body-l{font-size:16px} .stat-grid{grid-template-columns:1fr 1fr} .tl-item{grid-template-columns:1fr;gap:4px}
+}
+@media (prefers-reduced-motion:no-preference){ .section{animation:up .35s ease} @keyframes up{from{opacity:1;transform:translateY(6px)}to{opacity:1;transform:none}} }
+</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="tb-brand"><span class="tb-hex"></span>Jellyfish · GTM Playbook</div>
+  <span class="tb-date">Positioning · November 2026</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections">
+  <div class="sn-label">Playbook</div>
+  <div role="tablist">
+  <button class="sn-tab" role="tab" id="tab-manifesto" aria-controls="manifesto" aria-selected="true"><span class="sn-dot"></span>JF Messaging Manifesto</button>
+  <button class="sn-tab" role="tab" id="tab-usecases" aria-controls="usecases" aria-selected="false"><span class="sn-dot"></span>Killer Use Cases</button>
+  <button class="sn-tab" role="tab" id="tab-deck" aria-controls="deck" aria-selected="false"><span class="sn-dot"></span>Pitch Deck</button>
+  </div>
+  <div class="sn-divider"></div>
+  <div class="sn-label">Open</div>
+  <a class="sn-link" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP">First Call Deck ↗</a>
+  <a class="sn-link" href="https://claude.ai/artifact/M6JQXJC3xP3grUwgCEww4Y">Concise manifesto doc ↗</a>
+  <a class="sn-link" href="https://claude.ai/artifact/Gm5Fmz7hK5QXQLYQyctLMZ">Full manifesto doc ↗</a>
+</nav>
+<main class="main">
+
+<section class="section" id="manifesto" role="tabpanel" aria-labelledby="tab-manifesto">
+  <div class="eyebrow">JF Messaging Manifesto</div>
+  <h1 class="headline">More code isn’t more <em>value.</em></h1>
+  <p class="body-l">Almost every engineering team now runs AI coding agents. Code throughput has roughly doubled. And yet fewer than half of engineering leaders can say what any of it is worth. This manifesto is the story Jellyfish tells to close that gap, in the order a first call should tell it.</p>
+
+  <div class="rule"></div>
+  <div class="kicker">The shift</div>
+  <h2 class="subhead">The bottleneck moved, and the old metrics can’t see it.</h2>
+  <p class="body">AI triples the code moving through the pipeline. It also creates new bottlenecks in review and CI, new costs in tokens and seats, and new questions from finance and the board. Agent-written code passes checks by default and more of it merges with AI as the only reviewer, so the one checkpoint everyone relied on, code review, has quietly stopped working as the quality gate. Metrics built for human-only teams can’t tell you which changes are helping.</p>
+  <p class="body">Ask four people in the same org and you get four answers. The engineer says they’re shipping 3x faster. The manager says reviews are piling up and they can’t tell what the agent did. The VP asks whether the spend is paying off. The CTO asks whether quality is holding. Same tools, four expectations, no shared number.</p>
+  <div class="stat-grid">
+    <div class="stat-cell"><div class="stat-num">2x</div><div class="stat-label">Code throughput, while features shipped rose only 40–50%</div></div>
+    <div class="stat-cell"><div class="stat-num">3.8x</div><div class="stat-label">AI spend per engineer, Q1→Q3 2026, at 98% of headcount</div></div>
+    <div class="stat-cell"><div class="stat-num">9.4%</div><div class="stat-label">Merged PRs opened by autonomous agents at the top 1% of companies</div></div>
+  </div>
+
+  <div class="rule"></div>
+  <div class="kicker">What Jellyfish is</div>
+  <h2 class="subhead">The Agentic Engineering Intelligence and AI Impact Platform.</h2>
+  <p class="body">For engineering teams running an AI-native SDLC who can’t prove what agents return, Jellyfish shows how every agent, tool and team performs, ties it to delivery, quality and cost, and benchmarks it against 1,000+ organizations. Unlike metrics built for human-only teams, it’s built for human + agent work: people using AI and fully autonomous agents side by side, in the metrics leadership already trusts.</p>
+  <p class="body">The product is organized around the three questions every engineering leader gets asked today. Where do we stand? Are we transforming? What is it worth? We sell it as a journey with three stops: Adopt, Transform, Thrive.</p>
+
+  <div class="rule"></div>
+  <div class="kicker">Stop one · Adopt</div>
+  <h2 class="subhead">Maximize your AI coding agents’ ROI.</h2>
+  <p class="body">Everyone has adopted AI. No one can prove AI Impact. Ninety percent of teams already run coding agents, so this stop is about measuring what’s already there, not rolling it out. Jellyfish answers <em>where do I stand?</em> in the first weeks: any metric leadership already trusts, split by human contributors and autonomous agents; agents compared on outcomes instead of seats; power users found and their habits spread; and all of it benchmarked against 1,000+ orgs. When a number moves, you ask the Assistant why and get the likely cause.</p>
+  <div class="nb"><div class="nb-label">Proof</div><div class="nb-text">LastPass rolled Claude to 100% of 200 engineers and tracked it in Jellyfish. The issue lifecycle shortened 30–40% and the best AI-adopting teams delivered 2–3x faster. Loadsmart used the same evidence to choose Cursor over Copilot when cycle times flattened.</div></div>
+  <div class="nb"><div class="nb-label">Research</div><div class="nb-text">Merged PRs with agent involvement: 28% at the median company, 58% at the leaders. Adoption is not impact.</div></div>
+  <div class="nb"><div class="nb-label">Capabilities</div><div class="tags"><span class="tag g">Metrics Explorer with AI Assistance</span><span class="tag g">Custom metrics agent</span><span class="tag g">Blueprints</span><span class="tag g">Dashboard agent</span><span class="tag g">Flexible Lifecycle Explorer</span><span class="tag g">Jellyfish Assistant</span><span class="tag g">Team Benchmarks</span></div></div>
+  <div class="pullquote"><p>Rolling out AI tooling without measurement is just hope.</p><cite>Jim Turpin · VP Engineering, Arcadia</cite></div>
+
+  <div class="rule"></div>
+  <div class="kicker">Stop two · Transform</div>
+  <h2 class="subhead">Run the AI-native SDLC.</h2>
+  <p class="body">Teams feel busier, not faster. The bottleneck moved. Before AI, writing code was the constraint. With agents, code doubles and the constraint moves downstream to review and CI, so features rise only 40–50%. Just using AI isn’t sufficient anymore; the practices behind the output are what scale. Over the first two quarters Jellyfish answers <em>am I transforming?</em> by showing where the work really flows now, which skills and workflows your fastest teams use, and whether heavy adopters of a practice actually rework less and ship sooner than light ones. Early signals in weeks, instead of waiting for word of mouth.</p>
+  <div class="nb"><div class="nb-label">Proof</div><div class="nb-text">At Loadsmart, 86% of code is AI-generated and review had become 25% of delivery time. They paired AI coding with AI review, measured it in Jellyfish, and cut review delay to under 2% while feature velocity doubled. taskrabbit saw a 50% drop in issue cycle time and 2x deploys after adopting Augment.</div></div>
+  <div class="nb"><div class="nb-label">Research</div><div class="nb-text">Tenfold token use buys about 2.2x the merged PRs; gains taper at the top. PRs merged with AI as the only reviewer: 0.5% at the median company, 9% at lead adopters.</div></div>
+  <div class="nb"><div class="nb-label">Capabilities</div><div class="tags"><span class="tag g">Behavioral metrics</span><span class="tag g">Skills metrics</span><span class="tag g">Cohorts tied to outcomes</span><span class="tag g">Task classification</span><span class="tag g">SDLC phase classification</span></div></div>
+  <div class="pullquote"><p>I don’t see Jellyfish as a reporting tool. Jellyfish is a decision making tool.</p><cite>Ron Ben Yosef · CTO, Loadsmart</cite></div>
+
+  <div class="rule"></div>
+  <div class="kicker">Stop three · Thrive</div>
+  <h2 class="subhead">Human + agent teams that move the business.</h2>
+  <p class="body">AI cost has exploded, and the CFO wants to know what you’re getting for it. Token spend per merged PR is up 60x in twelve months, and the 2027 budget is being set now. By the next planning cycle Jellyfish answers <em>what is it worth?</em> with three questions finance will recognize. What are we spending, by vendor, model and team, next to total R&amp;D cost? What are we spending it on, mapped to the same investment categories used for people’s effort? And what are we getting for it, as cost per merged PR split human versus AI, with capacity gains told apart from hiring? Alongside the money, the people: delivery metrics next to developer surveys so speed gains don’t hide burnout, and one number for the board on a fixed cadence.</p>
+  <p class="body">What comes next is Agent Observatory, in Early Access from December 1. Quality is decided in the agent session before a PR is ever opened, so Jellyfish captures every session from every agent, links it to its commits and PR, scores it against the original intent, and puts coaching for the author and a heads-up for the reviewer right on the PR. Prompts analyzed, never shown.</p>
+  <div class="nb"><div class="nb-label">Proof</div><div class="nb-text">Siigo lifted team performance 30% and put engineering, product and finance on one set of numbers, with board reporting and roadmap planning run on Jellyfish projections. Flo Health caught near-burnout early, cut claimed keep-the-lights-on work from 20% to 5–10%, and presents Jellyfish benchmarks to investors every six months.</div></div>
+  <div class="nb"><div class="nb-label">Research</div><div class="nb-text">The median company spends 3.8x more per engineer than it did in Q1 at 98% of its headcount, while cost per merged PR fell from $1,202 to $820.</div></div>
+  <div class="nb"><div class="nb-label">Capabilities</div><div class="tags"><span class="tag g">AI spend dashboard</span><span class="tag g">Total R&amp;D Cost</span><span class="tag g">R&amp;D Cost per Merged PR</span><span class="tag g">AI spend allocation</span><span class="tag g">Cost per Issue / Deliverable</span><span class="tag g">AI capacity metrics</span><span class="tag g">AI cost benchmarks</span><span class="tag g">Agent Observatory</span></div></div>
+  <div class="pullquote"><p>It has bridged the gap between engineering, product, and finance, allowing us to connect our technical efforts directly to business priorities.</p><cite>Jaime Lopez Vivas · SVP Engineering, Siigo</cite></div>
+
+  <div class="rule"></div>
+  <div class="kicker">Who we sell to</div>
+  <h2 class="subhead">Six people, three conversations.</h2>
+  <p class="body">The ideal customer is an engineering org of 200 to 5,000 engineers that has already rolled out Claude Code, Cursor, Copilot or Augment and now has to prove what the rollout bought, often to a board or a private-equity partner. Inside that org the story lands differently depending on who is in the room.</p>
+  <div class="tl-item"><div class="tl-date">CTO / CPTO</div><div><div class="tl-title">Lead with Thrive, then Adopt</div><div class="tl-desc">Adoption looks good but they can’t prove what AI is buying, and the board asks before 2027 budgets close. They want one shared view of human and agent work and an answer for the board. Keep it strategic; skip feature detail.</div></div></div>
+  <div class="tl-item"><div class="tl-date">VP / Head of Eng</div><div><div class="tl-title">Lead with Adopt and Transform</div><div class="tl-desc">They can’t separate agent-driven velocity from hidden risk. Show agent activity tied to delivery, quality and cost. Never offer adoption stats as proof.</div></div></div>
+  <div class="tl-item"><div class="tl-date">CFO / Finance</div><div><div class="tl-title">Lead with Thrive</div><div class="tl-desc">Token bills grow with no link to output. Talk cost per outcome, unit economics and spend mapped to work. No engineering jargon.</div></div></div>
+  <div class="tl-item"><div class="tl-date">Platform / DevEx</div><div><div class="tl-title">Lead with Transform</div><div class="tl-desc">2x code moved the bottleneck to review and CI, code review is no longer the gate, and proof dies at the next tool migration. Show the real bottleneck and the practices that work. Never speed without quality.</div></div></div>
+  <div class="tl-item"><div class="tl-date">Eng Manager / TPM</div><div><div class="tl-title">Lead with Adopt and Transform</div><div class="tl-desc">No baseline, and reviews pile up with no idea what the agent did. Benchmarks, skills taking hold, and the Assistant. Avoid vague productivity claims.</div></div></div>
+  <div class="tl-item"><div class="tl-date">Engineer (IC)</div><div><div class="tl-title">Lead with Adopt</div><div class="tl-desc">Shipping 3x faster but the metrics count what they typed, and measurement feels like surveillance. Credit for agent-directed work and one thing to try per session. Never individual rankings.</div></div></div>
+
+  <div class="rule"></div>
+  <div class="kicker">How we say it</div>
+  <h2 class="subhead">The words that stay the same everywhere.</h2>
+  <div class="nb"><div class="nb-label">Tagline</div><div class="nb-text">Adopt. Transform. Thrive. Engineering intelligence for your human + agent teams.</div></div>
+  <div class="nb"><div class="nb-label">Alternates to test</div><div class="nb-text">Prove what your agents are worth · See how your people and agents really build software · AI adoption isn’t AI impact</div></div>
+  <div class="nb"><div class="nb-label">Boilerplate</div><div class="nb-text">Jellyfish is the leading Agentic Engineering Intelligence and AI Impact Platform, helping over 1,000 companies including DraftKings, Keller Williams and Blue Yonder, transform how they build software with AI. By turning fragmented data into context-rich guidance, Jellyfish enables better decision making across planning, developer experience and delivery so R&amp;D teams can drive stronger business outcomes.</div></div>
+  <div class="nb"><div class="nb-label">Proof library</div><div class="nb-text">LastPass, Loadsmart, taskrabbit, Varo Bank, Avaya, Siigo, Flo Health, Arcadia, plus supporting quotes from Box, Iberia, SPS Commerce, Diligent, Sportsbet, Daxko, Tripleseat and Precisely. Research from 1,300+ companies, 294K engineers, 110M PRs, 90M+ prompts and 150T+ tokens. Do not use nCino or Submittable.</div></div>
+</section>
+
+<section class="section wide" id="usecases" role="tabpanel" aria-labelledby="tab-usecases" hidden>
+  <div class="eyebrow">Killer Use Cases</div>
+  <h1 class="headline">From outreach to <em>demo.</em></h1>
+  <div class="cols" aria-hidden="true">
+  <div class="h"><b>1</b>BDR outreach + campaign</div>
+  <div class="h"><b>2</b>Hook message</div>
+  <div class="h"><b>3</b>Discovery questions</div>
+  <div class="h"><b>4</b>Jellyfish pitch</div>
+  <div class="h"><b>5</b>Demo blocks</div>
+</div>
+
+<!-- Lane 1: Adopt = Measure AI Impact -->
+<section class="lane" aria-label="Adopt">
+  <div class="card stage">
+    <span class="k">1 · Adopt</span>
+    <h2>Maximize your AI coding agents’ ROI</h2>
+    <p class="q">Measure AI Impact: Where do I stand?</p>
+    <p class="camp">Campaign: <strong>Adoption is not impact</strong>. 90%+ of teams already run AI coding agents; the ask is proof, not rollout.</p>
+    <p class="who">Targets: CTO, VP/Head of Engineering, Eng Managers</p>
+  </div>
+  <div class="card" data-step="2 · Hook message">
+    <span class="k">Hook</span>
+    <p class="hook">Everyone has adopted AI. No one can prove AI Impact.</p>
+    <p class="proof"><b>LastPass</b> rolled Claude to 100% of 200 engineers and tracked it in Jellyfish: issue lifecycle 30–40% shorter, best teams 2–3x faster.</p>
+    <div class="stat"><span class="n">28% → 58%</span><span class="l">Merged PRs with agent involvement: median company vs. leaders (Sept 2026)</span></div>
+  </div>
+  <div class="card" data-step="3 · Discovery questions">
+    <span class="k">Discovery</span>
+    <ol>
+      <li>Which AI coding tools are in use today, and how do you know who actually uses them each week?</li>
+      <li>When the board asks what AI bought you, what number do you give them?</li>
+      <li>How do you tell AI-driven velocity from inflated PR volume today?</li>
+    </ol>
+  </div>
+  <div class="card" data-step="4 · Jellyfish pitch">
+    <span class="k">Pitch</span>
+    <ul>
+      <li>People using AI and autonomous agents side by side, in metrics leadership already trusts</li>
+      <li>Measure productivity the way your org defines it, in plain English</li>
+      <li>Every team on the same research-backed metrics</li>
+      <li>Ask why a metric moved and get the likely root cause</li>
+    </ul>
+    <div class="chips"><span class="chip">Metrics Explorer with AI Assistance</span><span class="chip">Custom metrics agent</span><span class="chip">Blueprints</span><span class="chip">Dashboard agent</span><span class="chip">Flexible Lifecycle Explorer</span><span class="chip">Jellyfish Assistant</span><span class="chip">Team Benchmarks</span></div>
+  </div>
+  <div class="card demo" data-step="5 · Demo blocks">
+    <span class="k">Demo</span>
+    <ol>
+      <li>Metrics Explorer: PRs merged, split by human contributors and autonomous agents</li>
+      <li>Custom metrics agent: “break weighted PR throughput down by team”, then the SQL</li>
+      <li>Blueprints dashboard, then add a chart with the Dashboard agent</li>
+      <li>Flexible Lifecycle Explorer; ask the Assistant why cycle time spiked</li>
+    </ol>
+  </div>
+</section>
+
+<!-- Lane 2: Transform = Transform with AI-DLC -->
+<section class="lane" aria-label="Transform">
+  <div class="card stage">
+    <span class="k">2 · Transform</span>
+    <h2>Run the AI-native SDLC</h2>
+    <p class="q">Transform with AI-DLC: Am I transforming?</p>
+    <p class="camp">Campaign: <strong>Busier, not faster</strong>. Just using AI isn’t sufficient anymore; the practices behind the output are what scale.</p>
+    <p class="who">Targets: VP Platform / DevEx, Chief Architect, AI Champions leads</p>
+  </div>
+  <div class="card" data-step="2 · Hook message">
+    <span class="k">Hook</span>
+    <p class="hook">Teams feel busier, not faster. The bottleneck moved.</p>
+    <p class="proof"><b>Loadsmart</b>: 86% of code AI-generated, review delay cut from 25% of delivery time to under 2%, feature velocity doubled.</p>
+    <div class="stat"><span class="n">10x tokens → 2.2x PRs</span><span class="l">Tenfold token use buys about 2.2x the merged PRs; gains taper at the top</span></div>
+  </div>
+  <div class="card" data-step="3 · Discovery questions">
+    <span class="k">Discovery</span>
+    <ol>
+      <li>How do you decide which AI practices to spread today: data, or anecdotes from the people it’s working for?</li>
+      <li>Which skills or workflows have you rolled out, and do you know which teams actually use them?</li>
+      <li>Which team gets the most from AI, and what do they do differently?</li>
+    </ol>
+  </div>
+  <div class="card" data-step="4 · Jellyfish pitch">
+    <span class="k">Pitch</span>
+    <ul>
+      <li>See good practices taking hold before they show up in output</li>
+      <li>Know which skills teams adopt, and which spread on their own</li>
+      <li>Tie heavy vs. light adopters to rework rate and cycle time</li>
+      <li>See what engineers use agents for, by team and lifecycle phase</li>
+    </ul>
+    <div class="chips"><span class="chip">Behavioral metrics</span><span class="chip">Skills metrics</span><span class="chip">Cohorts tied to outcomes</span><span class="chip">Task classification</span><span class="chip">SDLC phase classification</span></div>
+  </div>
+  <div class="card demo" data-step="5 · Demo blocks">
+    <span class="k">Demo</span>
+    <ol>
+      <li>Behavioral metrics: skill usage, compaction rate, session agentic ratio (Claude Code)</li>
+      <li>Skills adoption by team over time; every skill ranked by usage</li>
+      <li>Cohorts: top 25% of a skill’s users vs. the rest on PR rework and cycle time</li>
+      <li>Task classification by team and week (alpha on request)</li>
+    </ol>
+  </div>
+</section>
+
+<!-- Lane 3: Thrive = Prove AI ROI -->
+<section class="lane" aria-label="Thrive">
+  <div class="card stage">
+    <span class="k">3 · Thrive</span>
+    <h2>Human + agent teams that move the business</h2>
+    <p class="q">Prove AI ROI: What is it worth?</p>
+    <p class="camp">Campaign: <strong>Stop guessing. Start measuring.</strong> Tokenomics for the 2027 R&amp;D budget.</p>
+    <p class="who">Targets: CTO, CFO / VP Finance, PE-backed leadership</p>
+  </div>
+  <div class="card" data-step="2 · Hook message">
+    <span class="k">Hook</span>
+    <p class="hook">AI cost has exploded. Your CFO wants to know what you’re getting for it.</p>
+    <p class="proof"><b>Siigo</b>: team performance up 30%, delivery more predictable, and engineering, product and finance on one set of numbers. <b>Flo Health</b> reports Jellyfish benchmarks to investors every six months.</p>
+    <div class="stat"><span class="n">60x</span><span class="l">Increase in token spend per merged PR over the past 12 months (Jellyfish Research)</span></div>
+  </div>
+  <div class="card" data-step="3 · Discovery questions">
+    <span class="k">Discovery</span>
+    <ol>
+      <li>What are you spending on AI across every vendor, and how does it compare with what you budgeted?</li>
+      <li>Can you say what work that spend went into, and whether people’s time moved to roadmap work?</li>
+      <li>What does a merged PR cost you today, and is that number moving the right way?</li>
+    </ol>
+  </div>
+  <div class="card" data-step="4 · Jellyfish pitch">
+    <span class="k">Pitch</span>
+    <ul>
+      <li>What are we spending? Every vendor, model and team in one view, next to total R&amp;D cost</li>
+      <li>What are we spending it on? AI dollars mapped to the same categories as people’s effort</li>
+      <li>What are we getting for it? Cost per merged PR, human vs. AI, and capacity gains told apart from hiring</li>
+      <li>Upcoming: every agent session scored from intent to outcome</li>
+    </ul>
+    <div class="chips"><span class="chip">AI spend dashboard</span><span class="chip">Total R&amp;D Cost</span><span class="chip">R&amp;D Cost per Merged PR</span><span class="chip">AI spend allocation</span><span class="chip">Cost per Issue / Deliverable</span><span class="chip">AI capacity metrics</span><span class="chip">AI cost benchmarks</span><span class="chip">Agent Observatory</span></div>
+  </div>
+  <div class="card demo" data-step="5 · Demo blocks">
+    <span class="k">Demo</span>
+    <ol>
+      <li>AI spend dashboard: Claude, Cursor, Copilot by tool, model and team, tracked over time</li>
+      <li>Total R&amp;D Cost: AI spend beside people cost</li>
+      <li>R&amp;D Cost per Merged PR, split human vs. AI, trending over the year</li>
+      <li>AI spend allocation by investment category; Agent Observatory preview if they lean in</li>
+    </ol>
+  </div>
+</section>
+
+
+  <p class="body" style="font-size:12px;color:var(--dim);margin-top:20px">Capabilities and availability from AI Impact Week Day 2 (Oct 2026). Stats from AI Engineering Trends and Jellyfish Research. Agent Observatory: Early Access Dec 1, GA March; confirm claims with product before external use.</p>
+</section>
+
+<section class="section wide" id="deck" role="tabpanel" aria-labelledby="tab-deck" hidden>
+  <div class="eyebrow">Pitch Deck</div>
+  <h1 class="headline">See how your people and agents really build <em>software.</em></h1>
+  <p class="body-l">Jellyfish is the Agentic Engineering Intelligence and AI Impact Platform. It connects AI usage, cost and capacity to real outcomes, benchmarked against 1,000+ engineering orgs, so leaders can see where they stand, whether they’re transforming, and what it’s worth. The first-call deck tells that story in three stops: Adopt, Transform, Thrive.</p>
+  <a class="openbtn" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP">Open the First Call Deck ↗</a>
+  <div class="dsec"><div class="kicker">Section 01 · Slides 1–6</div><h3 class="subhead">Intro to JF and setup</h3><div class="grid">
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-1"><img class="f-img" src="slides/s-01.jpg" alt="Slide 1" loading="lazy" width="800" height="450"><span class="n">1</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-2"><img class="f-img" src="slides/s-02.jpg" alt="Slide 2" loading="lazy" width="800" height="450"><span class="n">2</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-3"><img class="f-img" src="slides/s-03.jpg" alt="Slide 3" loading="lazy" width="800" height="450"><span class="n">3</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-4"><img class="f-img" src="slides/s-04.jpg" alt="Slide 4" loading="lazy" width="800" height="450"><span class="n">4</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-5"><img class="f-img" src="slides/s-05.jpg" alt="Slide 5" loading="lazy" width="800" height="450"><span class="n">5</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-6"><img class="f-img" src="slides/s-06.jpg" alt="Slide 6" loading="lazy" width="800" height="450"><span class="n">6</span></a>
+</div></div>
+<div class="dsec"><div class="kicker">Section 02 · Slides 7–13 · Measure AI Impact: Where do I stand?</div><h3 class="subhead">Maximize your AI coding agents’ ROI</h3><div class="grid">
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-7"><img class="f-img" src="slides/s-07.jpg" alt="Slide 7" loading="lazy" width="800" height="450"><span class="n">7</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-8"><img class="f-img" src="slides/s-08.jpg" alt="Slide 8" loading="lazy" width="800" height="450"><span class="n">8</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-9"><img class="f-img" src="slides/s-09.jpg" alt="Slide 9" loading="lazy" width="800" height="450"><span class="n">9</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-10"><img class="f-img" src="slides/s-10.jpg" alt="Slide 10" loading="lazy" width="800" height="450"><span class="n">10</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-11"><img class="f-img" src="slides/s-11.jpg" alt="Slide 11" loading="lazy" width="800" height="450"><span class="n">11</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-12"><img class="f-img" src="slides/s-12.jpg" alt="Slide 12" loading="lazy" width="800" height="450"><span class="n">12</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-13"><img class="f-img" src="slides/s-13.jpg" alt="Slide 13" loading="lazy" width="800" height="450"><span class="n">13</span></a>
+</div></div>
+<div class="dsec"><div class="kicker">Section 03 · Slides 14–19 · Transform with AI-DLC: Am I transforming?</div><h3 class="subhead">Run the AI-native SDLC</h3><div class="grid">
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-14"><img class="f-img" src="slides/s-14.jpg" alt="Slide 14" loading="lazy" width="800" height="450"><span class="n">14</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-15"><img class="f-img" src="slides/s-15.jpg" alt="Slide 15" loading="lazy" width="800" height="450"><span class="n">15</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-16"><img class="f-img" src="slides/s-16.jpg" alt="Slide 16" loading="lazy" width="800" height="450"><span class="n">16</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-17"><img class="f-img" src="slides/s-17.jpg" alt="Slide 17" loading="lazy" width="800" height="450"><span class="n">17</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-18"><img class="f-img" src="slides/s-18.jpg" alt="Slide 18" loading="lazy" width="800" height="450"><span class="n">18</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-19"><img class="f-img" src="slides/s-19.jpg" alt="Slide 19" loading="lazy" width="800" height="450"><span class="n">19</span></a>
+</div></div>
+<div class="dsec"><div class="kicker">Section 04 · Slides 20–25 · Prove AI ROI: What is it worth?</div><h3 class="subhead">Human + agent teams that move the business</h3><div class="grid">
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-20"><img class="f-img" src="slides/s-20.jpg" alt="Slide 20" loading="lazy" width="800" height="450"><span class="n">20</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-21"><img class="f-img" src="slides/s-21.jpg" alt="Slide 21" loading="lazy" width="800" height="450"><span class="n">21</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-22"><img class="f-img" src="slides/s-22.jpg" alt="Slide 22" loading="lazy" width="800" height="450"><span class="n">22</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-23"><img class="f-img" src="slides/s-23.jpg" alt="Slide 23" loading="lazy" width="800" height="450"><span class="n">23</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-24"><img class="f-img" src="slides/s-24.jpg" alt="Slide 24" loading="lazy" width="800" height="450"><span class="n">24</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-25"><img class="f-img" src="slides/s-25.jpg" alt="Slide 25" loading="lazy" width="800" height="450"><span class="n">25</span></a>
+</div></div>
+<div class="dsec"><div class="kicker">Section 05 · Slides 26–27</div><h3 class="subhead">Close</h3><div class="grid">
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-26"><img class="f-img" src="slides/s-26.jpg" alt="Slide 26" loading="lazy" width="800" height="450"><span class="n">26</span></a>
+<a class="thumb" href="https://claude.ai/artifact/LVZ2JnihiT4ukcvREB7SrP#slide-27"><img class="f-img" src="slides/s-27.jpg" alt="Slide 27" loading="lazy" width="800" height="450"><span class="n">27</span></a>
+</div></div>
+</section>
+
+</main>
+</div>
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.sn-tab'));
+  var panels=[].slice.call(document.querySelectorAll('.section'));
+  function show(id){
+    tabs.forEach(function(t){t.setAttribute('aria-selected',String(t.getAttribute('aria-controls')===id));});
+    panels.forEach(function(p){p.hidden=(p.id!==id);});
+    try{localStorage.setItem('jf-tab',id);}catch(e){}
+    try{document.querySelector('.main').scrollTop=0;window.scrollTo(0,0);}catch(e){}
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.getAttribute('aria-controls'));});});
+  var ids=['manifesto','usecases','deck'];
+  var h=(location.hash||'').replace('#','');
+  var saved=null; try{saved=localStorage.getItem('jf-tab');}catch(e){}
+  show(ids.indexOf(h)>=0?h:(ids.indexOf(saved)>=0?saved:'manifesto'));
+})();
+</script>
+
+</body>
+</html>
